@@ -30,14 +30,14 @@ ui <- navbarPage("Title",
                             column(2,
                             selectInput("open", "Open",
                                         c("Yes", "No"))),
-                          
-                            column(5,
-                            dataTableOutput("data")
-                          )),
+                           
+                            column(6,
+                            DT::dataTableOutput("data")
+                            )),
                           
                         
                          mainPanel(
-                           
+                          
                          )    
                           )
                           
@@ -49,26 +49,25 @@ ui <- navbarPage("Title",
   
 
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
   
   
   output$data <- DT::renderDataTable(
     {
-      testdata <- fromJSON("test_data.json", flatten = T)
+     testdata <- fromJSON("test_data.json", flatten = T)
+     
+     #testdata <- read.table("test_data.txt")
+     
+     select_price <- input$price
+     select_cat <- input$category
       
-      #testdata <- read.table("test_data.txt")
-      
-      select_price <- input$price
-      select_cat <- input$category
-      
-      
-      testdata$businesses %>%
+      testdata$businesses %>% 
         select(name, price, rating) %>% 
+        
         filter(price == select_price)
       
     
-    }, 
+    },
     options = list(pageLength = 10)
       
     )
