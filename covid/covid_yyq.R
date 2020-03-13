@@ -13,77 +13,41 @@ ui <- navbarPage("Covid",
                  #tabPanel("main"),
                  
                  tabPanel("History", 
-                          
-                    tabsetPanel(
-                      
-                      tabPanel("Confirmed",
-                    
-                        fluidRow(
+                     
+                           fluidRow(
                            column(2,
-                           selectInput(inputId = "confirmed_country", 
+                           selectInput(inputId = "country", 
                                        label = "Select a Country:",
                                        choices = unique(confirm$`Country/Region`),
                                        selected = "US")
-                                 )
-                         ),
+                                 ),
+                      
                          
-                         mainPanel(
-                           
                            fluidRow(
                              column(4,
-                                    selectInput(inputId = "confirmed_countries", 
+                                    selectInput(inputId = "countries", 
                                                 label = "Select other Countries:",
                                                 choices = unique(confirm$`Country/Region`),
                                                 multiple = TRUE)
+                                   )
                              )),
-                           plotlyOutput("confirmed_line")
-                         )
-                    ),
-                    
-                    tabPanel("Deaths",
+                           
+                           mainPanel(
+                            tabsetPanel(
                              
-                             fluidRow(
-                               column(2,
-                                      selectInput(inputId = "death_country", 
-                                                  label = "Country",
-                                                  choices = unique(death$`Country/Region`),
-                                                  selected = "US",
-                                                  multiple = T)
-                               )
-                               
-                               
-                               
-                               
-                             ),
-                             
-                             mainPanel(
-                               plotlyOutput("death_line")
-                             )
-                    ),
-                    
-                    tabPanel("Recovered",
-                             
-                             fluidRow(
-                               column(2,
-                                      selectInput(inputId = "recover_country", 
-                                                  label = "Country",
-                                                  choices = unique(death$`Country/Region`),
-                                                  selected = "US",
-                                                  multiple = T)
-                               )
-                               
-                               
-                               
-                               
-                             ),
-                             
-                             mainPanel(
-                               plotlyOutput("recover_line")
-                             )
-                    )
-                    )        
+                               tabPanel("Confirmed",
+                                      plotlyOutput("confirmed_line")
+                                      ),
+                               tabPanel("Death",
+                                      plotlyOutput("death_line")
+                                      ),
+                               tabPanel("Recovered",
+                                      plotlyOutput("recover_line")
+                                      )
+                           )
+                           )
+                         )        
                   )
-)    
                           
   
 server <- function(input, output) {
@@ -93,7 +57,7 @@ server <- function(input, output) {
     {
      
       date_ct <- confirm %>%
-       filter(`Country/Region` %in% input$confirmed_country | `Country/Region` %in% input$confirmed_countries) %>% 
+       filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
        select(`Country/Region`, "1/22/20":ncol(confirm)) %>% 
        group_by(`Country/Region`) %>% 
        summarise_each(funs(sum)) %>% 
@@ -114,7 +78,7 @@ server <- function(input, output) {
     {
       
       date_ct <- death %>%
-        filter(`Country/Region` %in% input$death_country) %>% 
+        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
         select(`Country/Region`, "1/22/20":ncol(death)) %>% 
         group_by(`Country/Region`) %>% 
         summarise_each(funs(sum)) %>% 
@@ -135,7 +99,7 @@ server <- function(input, output) {
     {
       
       date_ct <- recover %>%
-        filter(`Country/Region` %in% input$recover_country) %>% 
+        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
         select(`Country/Region`, "1/22/20":ncol(recover)) %>% 
         group_by(`Country/Region`) %>% 
         summarise_each(funs(sum)) %>% 
