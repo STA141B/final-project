@@ -28,7 +28,7 @@ ui <- navbarPage("Covid",
                                     selectInput(inputId = "countries", 
                                                 label = "Select other Countries:",
                                                 choices = unique(confirm$`Country/Region`),
-                                                multiple = TRUE)
+                                                multiple = TRUE) 
                                    )
                              )),
                            
