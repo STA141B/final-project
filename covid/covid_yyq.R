@@ -1,6 +1,7 @@
 library(shiny)
 library(lubridate)
 library(dplyr)
+library(plotly)
 
 confirm <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"))
 death <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"))
@@ -20,18 +21,21 @@ ui <- navbarPage("Covid",
                         fluidRow(
                            column(2,
                            selectInput(inputId = "confirmed_country", 
-                                       label = "Country",
+                                       label = "Select a Country:",
                                        choices = unique(confirm$`Country/Region`),
-                                       selected = "US",
-                                       multiple = T)
+                                       selected = "US")
                                  )
-                           
-                           
-                         
-                           
                          ),
                          
                          mainPanel(
+                           
+                           fluidRow(
+                             column(4,
+                                    selectInput(inputId = "confirmed_countries", 
+                                                label = "Select other Countries:",
+                                                choices = unique(confirm$`Country/Region`),
+                                                multiple = TRUE)
+                             )),
                            plotlyOutput("confirmed_line")
                          )
                     ),
@@ -89,7 +93,7 @@ server <- function(input, output) {
     {
      
       date_ct <- confirm %>%
-       filter(`Country/Region` %in% input$confirmed_country) %>% 
+       filter(`Country/Region` %in% input$confirmed_country | `Country/Region` %in% input$confirmed_countries) %>% 
        select(`Country/Region`, "1/22/20":ncol(confirm)) %>% 
        group_by(`Country/Region`) %>% 
        summarise_each(funs(sum)) %>% 
