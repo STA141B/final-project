@@ -86,13 +86,14 @@ server <- function(input, output) {
      
       date_ct <- confirm %>%
        filter(`Country/Region` %in% input$confirmed_country) %>% 
-       select(`Country/Region`, "1/22/20":54) %>% 
+       select(`Country/Region`, "1/22/20":ncol(confirm)) %>% 
        group_by(`Country/Region`) %>% 
        summarise_each(funs(sum)) %>% 
        pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
        mutate(date = mdy(date)) %>% 
        plot_ly(x = ~date, y = ~num) %>% 
-       add_lines(color=~`Country/Region`) %>% 
+       add_trace(color = ~`Country/Region`,
+                  mode = 'lines+markers')  %>% 
        layout(
               xaxis = list(title = "Date"), 
               yaxis = list(title = "Cumulative Confirmed")
@@ -106,13 +107,14 @@ server <- function(input, output) {
       
       date_ct <- death %>%
         filter(`Country/Region` %in% input$death_country) %>% 
-        select(`Country/Region`, "1/22/20":54) %>% 
+        select(`Country/Region`, "1/22/20":ncol(death)) %>% 
         group_by(`Country/Region`) %>% 
         summarise_each(funs(sum)) %>% 
         pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
         mutate(date = mdy(date)) %>% 
         plot_ly(x = ~date, y = ~num) %>% 
-        add_lines(color=~`Country/Region`) %>% 
+        add_trace(color = ~`Country/Region`,
+                  mode = 'lines+markers')  %>% 
         layout(
           xaxis = list(title = "Date"), 
           yaxis = list(title = "Cumulative Deaths")
@@ -126,13 +128,14 @@ server <- function(input, output) {
       
       date_ct <- recover %>%
         filter(`Country/Region` %in% input$recover_country) %>% 
-        select(`Country/Region`, "1/22/20":54) %>% 
+        select(`Country/Region`, "1/22/20":ncol(recover)) %>% 
         group_by(`Country/Region`) %>% 
         summarise_each(funs(sum)) %>% 
         pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
         mutate(date = mdy(date)) %>% 
         plot_ly(x = ~date, y = ~num) %>% 
-        add_lines(color=~`Country/Region`) %>% 
+        add_trace(color = ~`Country/Region`,
+                  mode = 'lines+markers')  %>% 
         layout(
           xaxis = list(title = "Date"), 
           yaxis = list(title = "Cumulative Recovered")
