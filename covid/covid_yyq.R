@@ -1,6 +1,6 @@
 library(shiny)
 library(lubridate)
-library(dplyr)
+library(tidyverse)
 library(plotly)
 
 confirm <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"))
@@ -21,8 +21,8 @@ ui <- navbarPage("Covid",
                                        choices = unique(confirm$`Country/Region`),
                                        selected = "US")
                                  ),
-                      
-                         
+                           
+                          
                            fluidRow(
                              column(4,
                                     selectInput(inputId = "countries", 
@@ -33,10 +33,14 @@ ui <- navbarPage("Covid",
                              )),
                            
                            mainPanel(
+                             
+                             
+                             
                             tabsetPanel(
                              
                                tabPanel("Confirmed",
-                                      plotlyOutput("confirmed_line")
+                                      plotlyOutput("confirmed_line"),
+                                      plotlyOutput("growth_factor")
                                       ),
                                tabPanel("Death",
                                       plotlyOutput("death_line")
@@ -44,6 +48,7 @@ ui <- navbarPage("Covid",
                                tabPanel("Recovered",
                                       plotlyOutput("recover_line")
                                       )
+                               
                            )
                            )
                          )        
@@ -53,25 +58,42 @@ ui <- navbarPage("Covid",
 server <- function(input, output) {
   
   
-  output$confirmed_line <- renderPlotly(
+  output$growth_factor <- renderPlotly(
     {
      
-      date_ct <- confirm %>%
-       filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
-       select(`Country/Region`, "1/22/20":ncol(confirm)) %>% 
-       group_by(`Country/Region`) %>% 
-       summarise_each(funs(sum)) %>% 
-       pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
-       mutate(date = mdy(date)) %>% 
-       plot_ly(x = ~date, y = ~num) %>% 
-       add_trace(color = ~`Country/Region`,
-                  mode = 'lines+markers')  %>% 
-       layout(
-              xaxis = list(title = "Date"), 
-              yaxis = list(title = "Cumulative Confirmed")
-              )
-      
+      confirm %>%
+        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
+        select(`Country/Region`, "1/22/20":54) %>% 
+        group_by(`Country/Region`) %>% 
+        summarise_each(funs(sum)) %>% 
+        pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
+        mutate(date = mdy(date)) %>% 
+        
+        mutate(growth_factor = num/lag(num)) %>% 
+        plot_ly(x = ~date, y = ~growth_factor) %>% 
+        add_trace(mode = "bar", color = ~`Country/Region`)
     
+    })
+  
+  output$confirmed_line <- renderPlotly(
+    {
+      
+      date_ct <- confirm %>%
+        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
+        select(`Country/Region`, "1/22/20":ncol(confirm)) %>% 
+        group_by(`Country/Region`) %>% 
+        summarise_each(funs(sum)) %>% 
+        pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
+        mutate(date = mdy(date)) %>% 
+        plot_ly(x = ~date, y = ~num) %>% 
+        add_trace(color = ~`Country/Region`,
+                  mode = 'lines+markers')  %>% 
+        layout(
+          xaxis = list(title = "Date"), 
+          yaxis = list(title = "Cumulative Confirmed")
+        )
+      
+      
     })
   
   output$death_line <- renderPlotly(
