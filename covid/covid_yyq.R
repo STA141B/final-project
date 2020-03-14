@@ -40,7 +40,6 @@ ui <- navbarPage("Covid",
                              
                                tabPanel("Confirmed",
                                       plotlyOutput("confirmed_line"),
-                                      plotlyOutput("growth_factor")
                                       ),
                                tabPanel("Death",
                                       plotlyOutput("death_line")
@@ -57,23 +56,6 @@ ui <- navbarPage("Covid",
   
 server <- function(input, output) {
   
-  
-  output$growth_factor <- renderPlotly(
-    {
-     
-      confirm %>%
-        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
-        select(`Country/Region`, "1/22/20":54) %>% 
-        group_by(`Country/Region`) %>% 
-        summarise_each(funs(sum)) %>% 
-        pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
-        mutate(date = mdy(date)) %>% 
-        
-        mutate(growth_factor = num/lag(num)) %>% 
-        plot_ly(x = ~date, y = ~growth_factor) %>% 
-        add_trace(mode = "bar", color = ~`Country/Region`)
-    
-    })
   
   output$confirmed_line <- renderPlotly(
     {
