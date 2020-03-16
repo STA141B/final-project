@@ -26,7 +26,7 @@ ui <- navbarPage("Covid",
                            fluidRow(
                              column(4,
                                     selectInput(inputId = "countries", 
-                                                label = "Select other Countries:",
+                                                label = "Add another countries:",
                                                 choices = unique(confirm$`Country/Region`),
                                                 multiple = TRUE) 
                                    )
@@ -34,27 +34,35 @@ ui <- navbarPage("Covid",
                            
                            mainPanel(
                              
-                             
-                             
-                            tabsetPanel(
+                               
+                               tabsetPanel(
                              
                                tabPanel("Confirmed",
                                       plotlyOutput("confirmed_line"),
+                                      plotlyOutput("confirmed_new")
                                       ),
                                tabPanel("Death",
-                                      plotlyOutput("death_line")
+                                      plotlyOutput("death_line"),
+                                      plotlyOutput("death_new")
                                       ),
                                tabPanel("Recovered",
-                                      plotlyOutput("recover_line")
+                                      plotlyOutput("recover_line"),
+                                      plotlyOutput("recover_new")
                                       )
-                               
                            )
+                           
+                             
+                             
+                            
+                            
+                            
                            )
                          )        
                   )
                           
   
 server <- function(input, output) {
+  
   
   
   output$confirmed_line <- renderPlotly(
@@ -72,7 +80,32 @@ server <- function(input, output) {
                   mode = 'lines+markers')  %>% 
         layout(
           xaxis = list(title = "Date"), 
-          yaxis = list(title = "Cumulative Confirmed")
+          yaxis = list(title = "Cumulative Confirmed"),
+          title = "Cumulative Number of Confirmed Cases"
+        )
+      
+      
+    })
+  
+  output$confirmed_new <- renderPlotly(
+    {
+      
+      date_ct <- confirm %>%
+        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
+        select(`Country/Region`, "1/22/20":ncol(confirm)) %>% 
+        group_by(`Country/Region`) %>% 
+        summarise_each(funs(sum)) %>% 
+        pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
+        mutate(date = mdy(date)) %>%
+        group_by(`Country/Region`) %>% 
+        mutate(new = num - lag(num)) %>% 
+        plot_ly(x = ~date, y = ~new) %>% 
+        add_trace(color = ~`Country/Region`,
+                  mode = 'lines+markers')  %>% 
+        layout(
+          xaxis = list(title = "Date"), 
+          yaxis = list(title = "New Confirmed"),
+          title = "Daily New Cases"
         )
       
       
@@ -93,7 +126,32 @@ server <- function(input, output) {
                   mode = 'lines+markers')  %>% 
         layout(
           xaxis = list(title = "Date"), 
-          yaxis = list(title = "Cumulative Deaths")
+          yaxis = list(title = "Cumulative Deaths"),
+          title = "Cumulative Number of Deaths"
+        )
+      
+      
+    })
+  
+  output$death_new <- renderPlotly(
+    {
+      
+      date_ct <- death %>%
+        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
+        select(`Country/Region`, "1/22/20":ncol(death)) %>% 
+        group_by(`Country/Region`) %>% 
+        summarise_each(funs(sum)) %>% 
+        pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
+        mutate(date = mdy(date)) %>% 
+        group_by(`Country/Region`) %>% 
+        mutate(new = num - lag(num)) %>% 
+        plot_ly(x = ~date, y = ~new) %>% 
+        add_trace(color = ~`Country/Region`,
+                  mode = 'lines+markers')  %>% 
+        layout(
+          xaxis = list(title = "Date"), 
+          yaxis = list(title = "New Deaths"),
+          title = "Daily New Deaths"
         )
       
       
@@ -114,7 +172,31 @@ server <- function(input, output) {
                   mode = 'lines+markers')  %>% 
         layout(
           xaxis = list(title = "Date"), 
-          yaxis = list(title = "Cumulative Recovered")
+          yaxis = list(title = "Cumulative Recovered"),
+          title = "Cumulative Number of Recovered cases"
+        )
+    }
+  )
+  
+  output$recover_new <- renderPlotly(
+    {
+      
+      date_ct <- recover %>%
+        filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>% 
+        select(`Country/Region`, "1/22/20":ncol(recover)) %>% 
+        group_by(`Country/Region`) %>% 
+        summarise_each(funs(sum)) %>% 
+        pivot_longer(-`Country/Region`, names_to = "date", values_to = "num") %>% 
+        mutate(date = mdy(date)) %>% 
+        group_by(`Country/Region`) %>% 
+        mutate(new = num - lag(num)) %>% 
+        plot_ly(x = ~date, y = ~new) %>% 
+        add_trace(color = ~`Country/Region`,
+                  mode = 'lines+markers')  %>% 
+        layout(
+          xaxis = list(title = "Date"), 
+          yaxis = list(title = "New Recovered"),
+          title = "Daily New Recovered Cases"
         )
     }
   )
