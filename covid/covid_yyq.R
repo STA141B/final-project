@@ -49,12 +49,10 @@ ui <- navbarPage("Covid",
                                       plotlyOutput("recover_line"),
                                       plotlyOutput("recover_new")
                                       )
-                           )
+                           ),
                            
-                             
-                             
-                            
-                            
+                           a(herf = "https://github.com/CSSEGISandData/COVID-19", "Data Source: https://github.com/CSSEGISandData/COVID-19")
+                           
                             
                            )
                          )        
@@ -200,6 +198,8 @@ server <- function(input, output) {
         )
     }
   )
+  
+  
   
 }
 
