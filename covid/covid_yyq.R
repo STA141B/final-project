@@ -25,8 +25,10 @@ json <- content(r, as = "text")
 state <- fromJSON(json) %>% 
   mutate(date = ymd(date))
 
+
+
 state_map <- state_current %>% 
-  filter(state != "DC")
+  filter(state %in% datasets::state.abb)
 
 # Define UI for application that draws a histogram
 ui <- navbarPage("Covid",
@@ -59,16 +61,35 @@ ui <- navbarPage("Covid",
                                tabsetPanel(
                              
                                tabPanel("Confirmed",
-                                      plotlyOutput("confirmed_line"),
-                                      plotlyOutput("confirmed_new")
-                                      ),
+                                        fluidRow(
+                                          column(6,
+                                                 plotlyOutput("confirmed_line")),
+                                          column(6, 
+                                                 plotlyOutput("confirmed_new")),
+                                        )
+                                     ),
                                tabPanel("Death",
-                                      plotlyOutput("death_line"),
-                                      plotlyOutput("death_new")
+                                        
+                                        fluidRow(
+                                          column(6,
+                                                 plotlyOutput("death_line")),
+                                          column(6, 
+                                                 plotlyOutput("death_new")),
+                                        )
+                                        
+                                     # plotlyOutput("death_line"),
+                                     # plotlyOutput("death_new")
                                       ),
                                tabPanel("Recovered",
-                                      plotlyOutput("recover_line"),
-                                      plotlyOutput("recover_new")
+                                        
+                                        fluidRow(
+                                          column(6,
+                                                 plotlyOutput("recover_line")),
+                                          column(6, 
+                                                 plotlyOutput("recover_new")),
+                                        )
+                                     # plotlyOutput("recover_line"),
+                                     # plotlyOutput("recover_new")
                                       )
                            ),
                            
