@@ -46,7 +46,7 @@ shinyUI(fluidPage(
                       fluidRow(
                         column(4, selectInput(inputId = "country",
                                               label = "Select Countries:",
-                                              choices = unique(confirm$`Country/Region`),
+                                              choices = sort(unique(confirm$`Country/Region`)),
                                               selected = "US",
                                               multiple = TRUE))),
                       mainPanel(width = 12,
