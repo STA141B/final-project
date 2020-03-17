@@ -106,7 +106,7 @@ shinyServer(function(input, output) {
 
     output$confirmed_line <- renderPlotly({
         date_ct <- confirm %>%
-          filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>%
+          filter(`Country/Region` %in% input$country) %>%
           select(`Country/Region`, "1/22/20":ncol(confirm)) %>%
           group_by(`Country/Region`) %>%
           summarise_each(funs(sum)) %>%
@@ -124,7 +124,7 @@ shinyServer(function(input, output) {
 
     output$confirmed_new <- renderPlotly({
         date_ct <- confirm %>%
-          filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>%
+          filter(`Country/Region` %in% input$country) %>%
           select(`Country/Region`, "1/22/20":ncol(confirm)) %>%
           group_by(`Country/Region`) %>%
           summarise_each(funs(sum)) %>%
@@ -144,7 +144,7 @@ shinyServer(function(input, output) {
 
     output$death_line <- renderPlotly({
         date_ct <- death %>%
-          filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>%
+          filter(`Country/Region` %in% input$country) %>%
           select(`Country/Region`, "1/22/20":ncol(death)) %>%
           group_by(`Country/Region`) %>%
           summarise_each(funs(sum)) %>%
@@ -162,7 +162,7 @@ shinyServer(function(input, output) {
 
     output$death_new <- renderPlotly({
         date_ct <- death %>%
-          filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>%
+          filter(`Country/Region` %in% input$country) %>%
           select(`Country/Region`, "1/22/20":ncol(death)) %>%
           group_by(`Country/Region`) %>%
           summarise_each(funs(sum)) %>%
@@ -182,7 +182,7 @@ shinyServer(function(input, output) {
 
     output$recover_line <- renderPlotly({
         date_ct <- recover %>%
-          filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>%
+          filter(`Country/Region` %in% input$country) %>%
           select(`Country/Region`, "1/22/20":ncol(recover)) %>%
           group_by(`Country/Region`) %>%
           summarise_each(funs(sum)) %>%
@@ -200,7 +200,7 @@ shinyServer(function(input, output) {
 
     output$recover_new <- renderPlotly({
         date_ct <- recover %>%
-          filter(`Country/Region` %in% input$country | `Country/Region` %in% input$countries) %>%
+          filter(`Country/Region` %in% input$country) %>%
           select(`Country/Region`, "1/22/20":ncol(recover)) %>%
           group_by(`Country/Region`) %>%
           summarise_each(funs(sum)) %>%
