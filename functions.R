@@ -226,10 +226,10 @@ countrymap <- function(country_name){
     bins_country <- c(0,100,300,500,1000,10000,80000)
     bins_country2 <- c(0,2,5,10,30,1000,4000)
   } else if (country_name == "US") {
-    bins_country <- c(0,10,30,50,100,200,500,1000)
-    bins_country2 <- c(0,2,5,10,30,50)
+    bins_country <- c(0,30,50,100,200,500,1000,3000)
+    bins_country2 <- c(0,2,5,10,30,50,100)
   } else if (country_name == "Canada"){
-    bins_country <- c(0,2,5,10,50,100,200)
+    bins_country <- c(0,10,50,100,200,500)
     bins_country2 <- c(0,3,6,10)
   }
 

@@ -34,7 +34,10 @@ library(shinythemes)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-
+  
+  output$time <- renderText({
+    print(paste("Today", Sys.Date()))
+  })
     output$map <- renderLeaflet({
       Draw_world_map(data_Map, corona_data)
     })
@@ -50,6 +53,11 @@ shinyServer(function(input, output) {
             summ[[4]], "</b></font><br/><br/>",
             "Total Recovered Cases <br/><font color=\"#90EE90\"><b>",
             summ[[6]], "</b></font><br/><br/>")
+    })
+    
+    output$currentTime <- renderText({
+      invalidateLater(1000)
+      paste(Sys.time())
     })
 
     output$tbl <- renderDT({
@@ -82,9 +90,9 @@ shinyServer(function(input, output) {
                     #span = I(0),
                     locations = state.abb,
                     locationmode = 'USA-states') %>%
-          colorbar(title = "Total number of <br> tests by state") %>%
+          colorbar(title = "") %>%
           layout(geo = g,
-                title = "Current Testing for COVID-19 by State",
+                title = "",
                 plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
         map_us  %>%
           layout(dragmode = "select") %>%
@@ -98,9 +106,10 @@ shinyServer(function(input, output) {
           add_trace(y = ~negative, type = 'bar', name = "negative") %>%
           add_trace(y = ~pending, type = 'bar', name = "pending") %>%
           layout(barmode = 'stack',
-                 yaxis = list(title = 'Count'),
-                 title = paste("Daily Testing Tracking for", input$state, "(4pm Eastern)"),
-                 plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)'
+                 xaxis = list(title = ""),
+                 yaxis = list(title = ''),
+                 plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)',
+                 legend = list(orientation='h', xanchor='center', x= 0.5)
                  )
     })
 
@@ -116,9 +125,8 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
-            xaxis = list(title = "Date"),
-            yaxis = list(title = "Cumulative Confirmed"),
-            title = "Cumulative Number of Confirmed Cases",
+            xaxis = list(title = ""), #Cumulative Number of Confirmed Cases
+            yaxis = list(title = ""), #Cumulative Confirmed Cases
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
     })
 
@@ -136,9 +144,8 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
-            xaxis = list(title = "Date"),
-            yaxis = list(title = "New Confirmed"),
-            title = "Daily New Cases",
+            xaxis = list(title = ""),#Cumulative Number of Deaths
+            yaxis = list(title = ""), #New Deaths
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
     })
 
@@ -154,9 +161,8 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
-            xaxis = list(title = "Date"),
-            yaxis = list(title = "Cumulative Deaths"),
-            title = "Cumulative Number of Deaths",
+            xaxis = list(title = ""), 
+            yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
     })
 
@@ -174,9 +180,8 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
-            xaxis = list(title = "Date"),
-            yaxis = list(title = "New Deaths"),
-            title = "Daily New Deaths",
+            xaxis = list(title = ""),
+            yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
     })
 
@@ -192,9 +197,8 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
-            xaxis = list(title = "Date"),
-            yaxis = list(title = "Cumulative Recovered"),
-            title = "Cumulative Number of Recovered cases",
+            xaxis = list(title = ""),
+            yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
     })
 
@@ -212,9 +216,8 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
-            xaxis = list(title = "Date"),
-            yaxis = list(title = "New Recovered"),
-            title = "Daily New Recovered Cases",
+            xaxis = list(title = ""),
+            yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
     })
 })
