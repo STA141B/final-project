@@ -47,17 +47,30 @@ shinyServer(function(input, output) {
     })
 
     output$today_info <- renderText({
-      paste("Total Confirmed <br/><font color=\"#FF0000\"><b>",
-            summ[[2]], "</b></font><br/><br/>",
-            "Total Deaths <br/><font color=\"#808080\"><b>",
-            summ[[4]], "</b></font><br/><br/>",
-            "Total Recovered Cases <br/><font color=\"#90EE90\"><b>",
-            summ[[6]], "</b></font><br/><br/>")
+      paste("Total Confirmed <br/>",
+            as.character(tags$span(style = "color:red", summ[[2]])),
+            "<br/><br/>Total Deaths <br/>",
+            as.character(tags$span(style = "color:#808080", summ[[4]])),
+            "<br/><br/>Total Recovered Cases <br/>",
+            as.character(tags$span(style = "color:#90EE90", summ[[6]])), "<br/><br/>")
     })
     
     output$currentTime <- renderText({
       invalidateLater(1000)
       paste(Sys.time())
+    })
+    
+    output$news_updates <- renderText({
+      #paste(news[input$country2], sep = "<br/>")
+      news[input$country2] %>% unlist() %>% reduce(paste0)
+    })
+    
+    output$QandA <- renderText({
+      QA
+    })
+    
+    output$link4 <- renderText({
+      linkfour
     })
 
     output$tbl <- renderDT({

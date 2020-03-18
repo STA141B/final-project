@@ -279,7 +279,7 @@ countrymap <- function(country_name){
                   textsize = "15px",
                   direction = "auto"),
                 group = "Total Deaths") %>%
-    addLegend("bottomright", pal = pal_country2, values = ~ country_data$TotalDeaths,
+    addLegend("bottomleft", pal = pal_country2, values = ~ country_data$TotalDeaths,
               title = "Total Deaths",  labels = "Total Deaths",
               group = "Total Deaths") %>%
     addLayersControl(baseGroups = c("Total Cases", "Total Deaths"),
@@ -301,12 +301,38 @@ countrymap <- function(country_name){
 
 
   if (country_name == "China"){
-    Country_Map %>% setView(110,30,2.5)
+    Country_Map %>% setView(110,30,5)
   }else if (country_name == "US"){
-    Country_Map %>% setView(-110,40,2.5)
+    Country_Map %>% setView(-110,40,5)
   } else if (country_name == "Canada"){
-    Country_Map %>% setView(-90,60,2.5)
+    Country_Map %>% setView(-90,60,5)
   }
 
+}
+
+read_news <- function(country_name){
+  r <- GET(
+    "http://newsapi.org/v2/top-headlines",
+    query = list(
+      apiKey = "edc42fafbf144ee2aef125458f424ac0",
+      country= country_name,
+      #q = "coronavirus",
+      sortBy= "publishedAt"
+    )
+  )
+  json <- content(r, as = "text", encoding = "UTF-8")
+  response <- (fromJSON(json)$articles)[1:10,]
+  #response$source  <- response$source$name %>% unlist
+  #response$title <- (response$title %>% str_split(' [-] ', simplify = T) )[, 1]
+  response$publishedAt <- str_replace_all(response$publishedAt, "[TZ]"," ")
+  response %>% select(title, description, url, publishedAt)
+}
+
+row_new_html <- function(x){
+  x <- as.list(x)
+  as.character(tags$div(tags$strong(tags$h4(tags$a(href=x$url, x$title))), 
+                        tags$time(x$publishedAt), tags$br(), 
+                        tags$p("Description: ", x$description)), tags$hr())
+  
 }
 
