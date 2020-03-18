@@ -1,2 +1,2 @@
 # final-project
-travel recommendation
+Covid-19
