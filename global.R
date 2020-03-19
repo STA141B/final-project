@@ -2,8 +2,6 @@
 library(leaflet)
 library(tidyverse)
 library(rvest)
-library(maps)
-library(webglobe)
 library(DT)
 library(shinythemes)
 library(plotly)
@@ -14,8 +12,10 @@ library(htmltools)
 library(htmlwidgets)
 library(geojsonio)
 library(furrr)
+library(shiny)
+library(shinybusy)
 
-setwd('C:/Users/96238/Google Drive/UCDavis/STA 141B/git/final-project')
+setwd('C:/Users/98455/Desktop/winter_SY/STA141B/Final Project')
 source("functions.R")
 world <- geojson_read("custom.geo.json", what = "sp")
 list <- read_coro_data("https://www.worldometers.info/coronavirus/#countries", world)
@@ -80,41 +80,54 @@ QA <- as.character(
 )
 
 linkone <- as.character(
-  tags$div(
-    tags$h5(tags$a(href = "https://www.worldometers.info/coronavirus/#countries",
-                   "Data Source: https://www.worldometers.info/coronavirus/#countries"))
-  ))
+  tags$h5(tags$a(href = "https://www.worldometers.info/coronavirus/#countries",
+                 "Data Source: https://www.worldometers.info/coronavirus/#countries")
+          )
+  )
 
 linktwo <- as.character(
-    tags$div(
-      tags$h5(tags$a(href = "https://github.com/CSSEGISandData/COVID-19",
-                     "Data Source: https://github.com/CSSEGISandData/COVID-19"))
-    ))
+  tags$h5(tags$a(href = "https://github.com/CSSEGISandData/COVID-19",
+                 "Data Source: https://github.com/CSSEGISandData/COVID-19")
+          )
+  )
 
 
 linkthree <- as.character(
-  tags$div(
-    tags$h5(tags$a(href = "https://newsapi.org/s/us-news-api",
-                   "Source: https://newsapi.org/s/us-news-api"))
-  ))
+  tags$h5(tags$a(href = "https://newsapi.org/s/us-news-api",
+                 "Source: https://newsapi.org/s/us-news-api")
+          )
+  )
 
 linkfour <- as.character(
-  tags$div(
-    tags$h5(tags$a(href = "https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics",
-                   "Source from CDC: https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics"))
-    ))
+  tags$h5(tags$a(href = "https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics",
+                 "CDC Source: https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics")
+          )
+  )
 
 
 linkfive <- as.character(
-  tags$div(
-    tags$h5(tags$a(href = "https://covidtracking.com/",
-                   "Data Source: https://covidtracking.com/"))
-  ))
+  tags$h5(tags$a(href = "https://covidtracking.com/",
+                 "Data Source: https://covidtracking.com/")
+          )
+  )
 
+linksix <- as.character(
+  tags$h5(tags$a(href = "https://www.worldometers.info/coronavirus/#countries",
+                 "Data Source: https://www.worldometers.info/coronavirus/#countries")
+  )
+)
 
+linkseven <- as.character(
+  tags$h5(tags$a(href = "https://github.com/CSSEGISandData/COVID-19",
+                 "Data Source: https://github.com/CSSEGISandData/COVID-19")
+  )
+)
 
-
-
+linkeight <- as.character(
+  tags$h5(tags$a(href = "https://news.wisc.edu/uw-madison-researchers-lead-efforts-to-understand-thwart-new-coronavirus/",
+                 "Image Source: https://news.wisc.edu/uw-madison-researchers-lead-efforts-to-understand-thwart-new-coronavirus/")
+  )
+)
 
 
 

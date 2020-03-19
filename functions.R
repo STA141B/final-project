@@ -3,23 +3,23 @@
 rename_countries <- function(data){
   data[, 1][data[, 1] == "S. Korea", ] = "Korea"
   data[, 1][data[, 1] == "USA", ] = "United States"
-
+  
   data[, 1] = purrr::map(data[, 1], ~if_else(. %in%
-                                               c("UK", "Seychelles", "Channel Islands"),
+                                               c("UK", "Seychelles", "Channel Islands"), 
                                              "United Kingdom", .))
-
+  
   data[, 1][data[, 1] == "Czechia", ] = "Czech Rep."
   data[, 1][data[, 1] == "UAE", ] = "United Arab Emirates"
   data[, 1][data[, 1] == "Bosnia and Herzegovina", ] = "Bosnia and Herz."
   data[, 1][data[, 1] == "North Macedonia", ] = "Macedonia"
-
+  
   data[, 1] = purrr::map(data[, 1], ~if_else(. %in%
-                                               c("Maldives", "Martinique", "French Guiana", "RÃ©union", "Guadeloupe", "Mayotte"),
+                                               c("Maldives", "Martinique", "French Guiana", "Réunion", "Guadeloupe", "Mayotte"), 
                                              "France", .))
-
+  
   data[, 1][data[, 1] == "Dominican Republic", ] = "Dominican Rep."
   data[, 1][data[, 1] == "Faeroe Islands", ] = "Faeroe Is."
-  data[, 1][data[, 1] == "Ivory Coast", ] = "CÃ´te d'Ivoire"
+  data[, 1][data[, 1] == "Ivory Coast", ] = "Côte d'Ivoire"
   data[, 1][data[, 1] == "French Polynesia", ] = "Fr. Polynesia"
   data[, 1][data[, 1] == "DRC", ] = "Dem. Rep. Congo"
   data[, 1][data[, 1] == "Saint Martin", ] = "St-Martin"
@@ -28,10 +28,10 @@ rename_countries <- function(data){
   data[, 1][data[, 1] == "CAR", ] = "Central African Rep."
   data[, 1][data[, 1] == "Equatorial Guinea", ] = "Eq. Guinea"
   data[, 1][data[, 1] == "Vatican City", ] = "Vatican"
-  data[, 1][data[, 1] == "St. Barth", ] = "St-BarthÃ©lemy"
+  data[, 1][data[, 1] == "St. Barth", ] = "St-Barthélemy"
   data[, 1][data[, 1] == "St. Vincent Grenadines", ] = "St. Vin. and Gren."
   data[, 1][data[, 1] == "Eswatini", ] = "Swaziland"
-  data[, 1][data[, 1] == "U.S. Virgin Islands", ] = "U.S. Virgin Is."
+  data[, 1][data[, 1] == "U.S. Virgin Islands", ] = "U.S. Virgin Is."  
   data
 }
 
@@ -39,14 +39,14 @@ read_coro_data <- function(url, world){
   #html <- read_html("https://www.worldometers.info/coronavirus/#countries")
   html <- read_html(url)
   temp <- html %>%
-    html_nodes(xpath = "//table[@class = 'table table-bordered table-hover']")
-
-  title <- temp %>% html_nodes(xpath = "//th") %>%
+    html_nodes(xpath = '//table[@id = "main_table_countries_today"]')
+  
+  title <- temp %>% html_nodes("th") %>%
     html_text(trim = T)
-  list_data <- temp %>%  html_nodes(xpath = "//td") %>%
+  list_data <- temp %>%  html_nodes("td") %>%
     html_text(trim = T) %>%
     gsub(",","",.)
-
+  
   data <- matrix(list_data, ncol = 9, byrow = T) %>% as.tibble()
   colnames(data) <- title
   data[, 2:9] <- apply(data[, 2:9], 2, as.numeric)
@@ -143,7 +143,7 @@ Draw_world_map <- function(data_Map, geo_data){
                      options = layersControlOptions(collapsed = F)) %>%
     hideGroup("Total Deaths") %>%
     addEasyButton(easyButton(
-      icon="fa-globe", title="Zoom to Level 1",
+      icon="fa-globe", title="Back To Global",
       onClick=JS("function(btn, map){ map.setZoom(1); }"))) %>%
     addEasyButton(easyButton(
       icon="fa-crosshairs", title="Locate Me",
@@ -221,16 +221,19 @@ countrymap <- function(country_name){
     "<strong>%s</strong> <br/> Total Deaths: %g <sup></sup>",
     country_data$Province, country_data$TotalDeaths) %>% lapply(htmltools::HTML)
 
+max_case <- max(country_data$TotalCases, na.rm = T)
+max_death <- max(country_data$TotalDeaths, na.rm = T)
+
   ###set bins and color
   if (country_name == "China"){
-    bins_country <- c(0,100,300,500,1000,10000,80000)
-    bins_country2 <- c(0,2,5,10,30,1000,4000)
+    bins_country <- c(0,100,300,500,1000,10000,max_case)
+    bins_country2 <- c(0,2,5,10,30,1000,max_death)
   } else if (country_name == "US") {
-    bins_country <- c(0,30,50,100,200,500,1000,3000)
-    bins_country2 <- c(0,2,5,10,30,50,100)
+    bins_country <- c(0,50,100,200,500,1000,max_case)
+    bins_country2 <- c(0,2,5,10,30,50,max_death)
   } else if (country_name == "Canada"){
-    bins_country <- c(0,10,50,100,200,500)
-    bins_country2 <- c(0,3,6,10)
+    bins_country <- c(0,10,50,100,max_case)
+    bins_country2 <- c(0,1,3,max_death)
   }
 
 
@@ -284,31 +287,79 @@ countrymap <- function(country_name){
               group = "Total Deaths") %>%
     addLayersControl(baseGroups = c("Total Cases", "Total Deaths"),
                      options = layersControlOptions(collapsed = F)) %>%
-    hideGroup("Total Deaths")%>%
-    htmlwidgets::onRender("
-    function(el, x) {
-      var updateLegend = function () {
-          var selectedGroup = document.querySelectorAll('input:checked')[0].nextSibling.innerText.substr(1);
-
-          document.querySelectorAll('.legend').forEach(a => a.hidden=true);
-          document.querySelectorAll('.legend').forEach(l => {
-            if (l.children[0].children[0].innerText == selectedGroup) l.hidden=false;
-          });
-      };
-      updateLegend();
-      this.on('baselayerchange', e => updateLegend());
-    }")
+    hideGroup("Total Deaths") %>%
+    addEasyButton(easyButton(
+      icon="fa-crosshairs", title="Locate Me",
+      onClick=JS("function(btn, map){ map.locate({setView: (110,35,2.5)}); }")))
 
 
   if (country_name == "China"){
-    Country_Map %>% setView(110,30,5)
+    Country_Map %>% setView(110,35,2.5)
   }else if (country_name == "US"){
-    Country_Map %>% setView(-110,40,5)
+    Country_Map %>% setView(-110,45,2.5)
   } else if (country_name == "Canada"){
-    Country_Map %>% setView(-90,60,5)
+    Country_Map %>% setView(-90,60,3)
   }
 
 }
+
+
+USmap <- function(){
+  
+  US <- geojson_read("US-provinces.json", what = "sp")
+  
+  n <- length(US$PRO)
+  
+  US_order <- sapply(1:n, function(i) {which(match(USdata$state,US$PRO[i]) == 1)}) %>% unlist()
+  
+  US_data <- USdata[US_order,] 
+  
+  US_Map <- US[US$PRO %in% US_data$state, ]
+  
+  labels_US <- sprintf(
+    "<strong>%s</strong> <br/> Positive: %g <br/> Negetive: %g <br/> Pending: %g <br/>
+    Death: %g <br/> Last Update Time: %s <sup></sup>",
+    US_data$state, US_data$positive, US_data$negative,
+    US_data$pending, US_data$death, US_data$lastUpdateEt) %>% lapply(HTML) 
+  
+  max_US <- max(US_data$positive, na.rm = T)
+  
+  bins_US <- c(0,50,100,200,500,1000,2000,max_US)
+  
+  pal_US <- colorBin("YlOrRd", domain = US_data$positive, bins = bins_US)
+  
+  US_Map <- leaflet(US_Map) %>% addTiles() %>%
+    addPolygons(fillColor = ~ pal_US(US_data$positive),
+                weight = 2, opacity = 1, color = 'white',
+                dashArray = '3', fillOpacity = 0.7,
+                highlight = highlightOptions(
+                  weight = 5,
+                  color = "#666",
+                  dashArray = "",
+                  fillOpacity = 0.7,
+                  bringToFront = TRUE),
+                label = labels_US,
+                labelOptions =
+                  labelOptions(style =
+                                 list("font-weight" = "normal",
+                                      padding = "3px 8px"),
+                               textsize = "15px",
+                               direction = "auto"))%>%
+    addLegend("bottomleft", pal = pal_US, values = ~ US_data$positive,
+              title = "Positive Testing") %>%
+    setView(-110,45,2.5) %>%
+    addEasyButton(easyButton(
+      icon="fa-globe", title="Back To Global",
+      onClick=JS("function(btn, map){ map.setZoom(3); }"))) %>%
+    addEasyButton(easyButton(
+      icon="fa-crosshairs", title="Locate Me",
+      onClick=JS("function(btn, map){ map.locate({setView: (-110,45,2.5)}); }")))
+  
+  US_Map
+}
+
+
+
 
 read_news <- function(country_name){
   r <- GET(
@@ -316,7 +367,7 @@ read_news <- function(country_name){
     query = list(
       apiKey = "edc42fafbf144ee2aef125458f424ac0",
       country= country_name,
-      #q = "coronavirus",
+      q = "coronavirus",
       sortBy= "publishedAt"
     )
   )
@@ -331,8 +382,10 @@ read_news <- function(country_name){
 row_new_html <- function(x){
   x <- as.list(x)
   as.character(tags$div(tags$strong(tags$h4(tags$a(href=x$url, x$title))), 
-                        tags$time(x$publishedAt), tags$br(), 
-                        tags$p("Description: ", x$description)), tags$hr())
+                        tags$time(x$publishedAt), tags$br(),
+                        tags$p("Description: ", x$description), tags$hr()
+                        )
+               )
   
 }
 

@@ -6,31 +6,7 @@
 #
 #    http://shiny.rstudio.com/
 #
-
-library(shiny)
-library(leaflet)
-library(tidyverse)
-library(rvest)
-library(maps)
-library(webglobe)
-library(DT)
-library(shinythemes)
-
 #
-# setwd('C:/Users/96238/Google Drive/UCDavis/STA 141B/proj/Coronavirus_info')
-# source("functions.R")
-# world <- geojsonio::geojson_read("custom.geo.json", what = "sp")
-# list <- read_coro_data("https://www.worldometers.info/coronavirus/#countries", world)
-# data_Map <- list[[1]]
-# corona_data <- list[[2]]
-# summ <- list[[3]]
-#
-# list2 <- read_daily_data()
-# confirm <- list2[[1]]
-# death <- list2[[2]]
-# recover <- list2[[3]]
-# state_map <- list[[4]]
-
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -69,8 +45,36 @@ shinyServer(function(input, output) {
       QA
     })
     
+    output$link1 <- renderText({
+      linkone
+    })
+    
+    output$link2 <- renderText({
+      linktwo
+    })
+    
+    output$link3 <- renderText({
+      linkthree
+    })
+    
     output$link4 <- renderText({
       linkfour
+    })
+    
+    output$link5 <- renderText({
+      linkfive
+    })
+    
+    output$link6 <- renderText({
+      linksix
+    })
+    
+    output$link7 <- renderText({
+      linkseven
+    })
+    
+    output$link8 <- renderText({
+      linkeight
     })
 
     output$tbl <- renderDT({
@@ -84,32 +88,8 @@ shinyServer(function(input, output) {
         formatStyle(columns = c(1,2,3,4,5,6,7,8,9), width='250px')
     })
 
-    output$US_map <- renderPlotly({
-        g <- list(scope = 'usa',
-                  projection = list(type = 'albers usa'),
-                  lakecolor = toRGB('white'))
-        map_us <- plot_geo() %>%
-          add_trace(z = ~state_map$total,
-                    color = ~state_map$total,
-                    colors = "Greys",
-                    text = state_map$state,
-                    hoverinfo = "text",
-                    hovertext = paste("<b>", state_map$state, "</b>",
-                                      "<br>Positive: ", state_map$positive,
-                                      "<br>Negative:", state_map$negative,
-                                      "<br>Pending: ", state_map$pending,
-                                      "<br>Total: ", state_map$total,
-                                      "<br>LastUpdateEt: ", state_map$lastUpdateEt),
-                    #span = I(0),
-                    locations = state.abb,
-                    locationmode = 'USA-states') %>%
-          colorbar(title = "") %>%
-          layout(geo = g,
-                title = "",
-                plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
-        map_us  %>%
-          layout(dragmode = "select") %>%
-          event_register("plotly_selecting")
+    output$US_map <- renderLeaflet({
+      USmap()
     })
 
     output$state_line <- renderPlotly({
@@ -138,6 +118,7 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
+            height =340, width = 540, margin = list(0,0,0,0),
             xaxis = list(title = ""), #Cumulative Number of Confirmed Cases
             yaxis = list(title = ""), #Cumulative Confirmed Cases
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
@@ -157,6 +138,7 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
+            height =340, width = 540, margin = list(0,0,0,0),
             xaxis = list(title = ""),#Cumulative Number of Deaths
             yaxis = list(title = ""), #New Deaths
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
@@ -174,6 +156,7 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
+            height =340, width = 540, margin = list(0,0,0,0),
             xaxis = list(title = ""), 
             yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
@@ -193,6 +176,7 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
+            height =340, width = 540, margin = list(0,0,0,0),
             xaxis = list(title = ""),
             yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
@@ -210,6 +194,7 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
+            height =340, width = 540, margin = list(0,0,0,0),
             xaxis = list(title = ""),
             yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
@@ -229,6 +214,7 @@ shinyServer(function(input, output) {
           add_trace(color = ~`Country/Region`,
                     type = 'scatter',mode = 'lines+markers')  %>%
           layout(
+            height =340, width = 540, margin = list(0,0,0,0),
             xaxis = list(title = ""),
             yaxis = list(title = ""),
             plot_bgcolor = 'rgb(220, 216, 216)', paper_bgcolor = 'rgb(220, 216, 216)')
