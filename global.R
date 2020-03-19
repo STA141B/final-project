@@ -15,8 +15,8 @@ library(furrr)
 library(shiny)
 library(shinybusy)
 
-setwd('C:/Users/98455/Desktop/winter_SY/STA141B/Final Project')
-source("functions.R")
+#setwd('C:/Users/98455/Desktop/winter_SY/STA141B/Final Project')
+#source("functions.R")
 world <- geojson_read("custom.geo.json", what = "sp")
 list <- read_coro_data("https://www.worldometers.info/coronavirus/#countries", world)
 data_Map <- list[[1]]
