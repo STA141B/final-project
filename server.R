@@ -27,7 +27,7 @@ shinyServer(function(input, output) {
             as.character(tags$span(style = "color:red", summ[[2]])),
             "<br/><br/>Total Deaths <br/>",
             as.character(tags$span(style = "color:#808080", summ[[4]])),
-            "<br/><br/>Total Recovered Cases <br/>",
+            "<br/><br/>Total Recovered <br/>",
             as.character(tags$span(style = "color:#90EE90", summ[[6]])), "<br/><br/>")
     })
     
@@ -89,7 +89,7 @@ shinyServer(function(input, output) {
     })
 
     output$US_map <- renderLeaflet({
-      USmap()
+      USmap("https://covidtracking.com/api/states")
     })
 
     output$state_line <- renderPlotly({

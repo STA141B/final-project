@@ -70,24 +70,27 @@ read_coro_data <- function(url, world){
   return(list(data_Map, geo_data, summ))
 }
 
-read_daily_data <- function(){
+read_daily_data <- function(US){
   confirm <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"))
   death <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"))
   recover <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"))
 
+  r <- GET("https://covidtracking.com/api/states/daily")
+  stop_for_status(r)
+  json <- content(r, as = "text")
+  
+  state <- fromJSON(json) %>%
+    mutate(date = ymd(date))
+  
   r <- GET("https://covidtracking.com/api/states")
   stop_for_status(r)
   json <- content(r, as = "text")
   state_current <- fromJSON(json)
-
-  r <- GET("https://covidtracking.com/api/states/daily")
-  stop_for_status(r)
-  json <- content(r, as = "text")
-  state <- fromJSON(json) %>%
-    mutate(date = ymd(date))
+  
   state_map <- state_current %>%
     filter(state %in% datasets::state.abb)
 
+  
   list(confirm, death, recover, state, state_map)
 }
 
@@ -304,15 +307,25 @@ max_death <- max(country_data$TotalDeaths, na.rm = T)
 }
 
 
-USmap <- function(){
+USmap <- function(url){
   
   US <- geojson_read("US-provinces.json", what = "sp")
   
-  n <- length(US$PRO)
+  r <- GET(url)
+  stop_for_status(r)
+  json <- content(r, as = "text")
+  state_current <- fromJSON(json)
   
-  US_order <- sapply(1:n, function(i) {which(match(USdata$state,US$PRO[i]) == 1)}) %>% unlist()
+  state_map <- state_current %>%
+    filter(state %in% datasets::state.abb)
   
-  US_data <- USdata[US_order,] 
+  state_map[,1] <- state_map$state %>% map(~state.name[grep(.,state.abb)]) %>% unlist
+  
+  USdata <- state_map  
+  
+  #US_order <- sapply(1:52, function(i) {which(match(USdata$state,US$PRO[i]) == 1)}) %>% unlist()
+  
+  US_data <- USdata[order(match(USdata$state,US$PRO)),] 
   
   US_Map <- US[US$PRO %in% US_data$state, ]
   
@@ -328,7 +341,7 @@ USmap <- function(){
   
   pal_US <- colorBin("YlOrRd", domain = US_data$positive, bins = bins_US)
   
-  US_Map <- leaflet(US_Map) %>% addTiles() %>%
+  US_MAP <- leaflet(US_Map) %>% addTiles() %>%
     addPolygons(fillColor = ~ pal_US(US_data$positive),
                 weight = 2, opacity = 1, color = 'white',
                 dashArray = '3', fillOpacity = 0.7,
@@ -355,9 +368,8 @@ USmap <- function(){
       icon="fa-crosshairs", title="Locate Me",
       onClick=JS("function(btn, map){ map.locate({setView: (-110,45,2.5)}); }")))
   
-  US_Map
+  US_MAP
 }
-
 
 
 
