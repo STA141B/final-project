@@ -1,28 +1,18 @@
 # Coronavirus(COVID-19) Real-time Dynamics
-### Dashboard
-This shows a real-time worldwide situation map of the total cases confirmed, deaths and recovered.
-![image](https://github.com/STA141B/final-project/blob/master/Dashboard.png)
 
-***
 ### Author
 Yujia Lu, Yue Lyu, Naijia Wang, Yuqing Yang. 
 ***
 ### Motivation
-The aim of this App is to provide worldwide real-time information about new coronavirus outbreak, including World Trend showing virus spreading; Detailed Situation with deaths, recovered and active cases; Daily Report that allowed country comparisons; Typical Country Data that people may concern about; Breaking News reported about "coronavirus" in four countries; More Information where you could find more about the virus and U.S. testing.  
+Coronavirus has spread to more than 170 countries and become a global pandemic. The aim of this App is to provide worldwide real-time information about new coronavirus outbreak, including World Trend showing virus spreading; Detailed Situation with deaths, recovered and active cases; Daily Report that allowed country comparisons; Typical Country Data that people may concern about; Breaking News reported about "coronavirus" in four countries; More Information where you could find more about the virus and U.S. testing.  
 ***
-### Source
-- Worldometers: https://www.worldometers.info/coronavirus/#countries
-- Novel Coronavirus (COVID-19): https://github.com/CSSEGISandData/COVID-19
-- World and China Map Data: https://github.com/deldersveld/topojson
-- US and Canada Map Data: https://exploratory.io/map
-- News API: https://newsapi.org/s/us-news-api
-- CDC Frequently Q&A: https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics
-***
+
 ### User Guide
 - World Trend (home page):  
 
 
 &emsp; Our home page is the real-time world situation map showing the total cases confirmed, deaths and recovered. Users can choose countries that they are interested in to see the further details of that country.  
+![image](https://github.com/STA141B/final-project/blob/master/Dashboard.png)
 
 - Detailed Situation:  
 
@@ -49,5 +39,15 @@ The aim of this App is to provide worldwide real-time information about new coro
 
 &emsp; For the last page, there are three sub-pages. The first one is [General Q&A], provided by the CDC. The second one, [US Testing], is daily testing result showing both in map and histogram for each state across the US. The last part is [About]. We include our motivation, github and contact information for future reference.
 ***
+
+### Source
+- Worldometers: https://www.worldometers.info/coronavirus/#countries
+- Novel Coronavirus (COVID-19): https://github.com/CSSEGISandData/COVID-19
+- World and China Map Data: https://github.com/deldersveld/topojson
+- US and Canada Map Data: https://exploratory.io/map
+- News API: https://newsapi.org/s/us-news-api
+- CDC Frequently Q&A: https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics
+***
+
 ### Contact us
 If you want to report any issue, please contact us: covidapphelp@gmail.com.
