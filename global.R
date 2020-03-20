@@ -15,14 +15,16 @@ library(furrr)
 library(shiny)
 library(shinybusy)
 
-setwd('C:/Users/98455/Desktop/winter_SY/STA141B/Final Project')
-source("helpers.R") 
+source("helpers.R")
+# read data for map on page 1 "World Trend"
 world <- geojson_read("custom.geo.json", what = "sp")
+# retrieve data for first page map
 list <- read_coro_data("https://www.worldometers.info/coronavirus/#countries", world)
 data_Map <- list[[1]]
 corona_data <- list[[2]]
 summ <- list[[3]]
 
+# read data for page 3 "Daily Report"
 list2 <- read_daily_data()
 confirm <- list2[[1]]
 death <- list2[[2]]
@@ -30,7 +32,8 @@ recover <- list2[[3]]
 state <- list2[[4]]
 state_map <- list2[[5]]
 
-
+# read data for page 5 "Breaking News"
+# currently only extract news for US, Canada, Australia, UK
 list3 <- c("us", "ca", "au", "gb")
 news <- list()
 for(i in 1:length(list3)){
@@ -38,15 +41,16 @@ for(i in 1:length(list3)){
   news[[list3[i]]] <- apply(temp, 1, row_new_html)
 }
 
+# information from CNC "https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics"
 QA <- as.character(
   tags$body(
     div(
       tags$h4(
         tags$strong("Q: Why is the disease being called coronavirus disease 2019, COVID-19?")),
-      tags$h5("A: On February 11, 2020 the World Health Organization announced an official name for the disease 
-            that is causing the 2019 novel coronavirus outbreak, first identified in Wuhan China. The new name 
-            of this disease is coronavirus disease 2019, abbreviated as COVID-19. In COVID-19, 'CO' stands for 
-            'corona,' 'VI' for 'virus,' and 'D' for disease. Formerly, this disease was referred to 
+      tags$h5("A: On February 11, 2020 the World Health Organization announced an official name for the disease
+            that is causing the 2019 novel coronavirus outbreak, first identified in Wuhan China. The new name
+            of this disease is coronavirus disease 2019, abbreviated as COVID-19. In COVID-19, 'CO' stands for
+            'corona,' 'VI' for 'virus,' and 'D' for disease. Formerly, this disease was referred to
             as \"2019 novel coronavirus\" or \"2019-nCoV\".")
     ),
     tags$br(),
@@ -55,7 +59,7 @@ QA <- as.character(
         tags$strong("Q: How It Spreads?")),
       tags$h5("A: The virus that causes COVID-19 seems to be spreading easily and sustainably in the community (\"community spread\") in ",
               tags$a(href = "https://www.cdc.gov/coronavirus/2019-ncov/prepare/transmission.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Fabout%2Ftransmission.html",
-                     tags$i(tags$strong("some affected geographic areas."))), 
+                     tags$i(tags$strong("some affected geographic areas."))),
               " Community spread means people have been infected with the virus in an area, including some who are not sure how or where they became infected.")
     ),
     tags$br(),
@@ -74,11 +78,12 @@ QA <- as.character(
       tags$h5("A: Current symptoms reported for patients with COVID-19 have included mild to severe respiratory illness with fever1, cough, and difficulty breathing. ",
               tags$a(href = "https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Fabout%2Fsymptoms.html",
                      tags$i(tags$strong("Read about COVID-19 Symptoms."))))
-    )  
+    )
   )
-         
+
 )
 
+# reference links
 linkone <- as.character(
   tags$h5(tags$a(href = "https://www.worldometers.info/coronavirus/#countries",
                  "Data Source: https://www.worldometers.info/coronavirus/#countries")
@@ -135,26 +140,28 @@ linknine <- as.character(
   )
 )
 
+# output of information about the app
+# Under "More information" -> "About"
 About <- as.character(
   tags$body(
     tags$br(),
     div(
       tags$h4(
         tags$strong("Motivation")),
-      tags$h5("Coronavirus disease 2019 (COVID-19) is an infectious disease caused by 
-              severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus 
-              is thought to be natural and have an animal origin, through spillover 
-              infection. It was first transmitted to humans in Wuhan, China, in November 
-              or December 2019, and the primary source of infection became human-to-human 
-              transmission by early January 2020. The earliest known infection occurred 
-              on 17 November 2019 and has since spread globally, resulting in the 2019-20 
+      tags$h5("Coronavirus disease 2019 (COVID-19) is an infectious disease caused by
+              severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus
+              is thought to be natural and have an animal origin, through spillover
+              infection. It was first transmitted to humans in Wuhan, China, in November
+              or December 2019, and the primary source of infection became human-to-human
+              transmission by early January 2020. The earliest known infection occurred
+              on 17 November 2019 and has since spread globally, resulting in the 2019-20
               coronavirus pandemic."),
-      tags$h5("The aim of this App is to provide worldwide real-time information about new coronavirus outbreak, including ", 
-              tags$i(tags$strong("World Trend")), "showing virus spreading; ", 
+      tags$h5("The aim of this App is to provide worldwide real-time information about new coronavirus outbreak, including ",
+              tags$i(tags$strong("World Trend")), "showing virus spreading; ",
               tags$i(tags$strong("Detailed Situation")), "with deaths, recovered and active cases; ",
               tags$i(tags$strong("Daily Report")), " that allowed country comparisons; ",
               tags$i(tags$strong("Typical Country Data")), "that people may concern about; ",
-              tags$i(tags$strong("Breaking News")), "reported about \"coronavirus\" in four countries; ", 
+              tags$i(tags$strong("Breaking News")), "reported about \"coronavirus\" in four countries; ",
               tags$i(tags$strong("More Information")), "where you could find more about the virus and U.S. testing.")
     ),
     tags$br(),
@@ -170,9 +177,9 @@ About <- as.character(
       tags$h4(
         tags$strong("Feedback")),
       tags$h5("If you want to report any issue, please contact us: covidapphelp@gmail.com.")
-    ) 
+    )
   )
-  
+
 )
 
 
