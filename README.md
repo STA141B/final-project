@@ -1,7 +1,8 @@
 # Coronavirus(COVID-19) Real-time Dynamics
 ### Dashboard
+![image](https://github.com/STA141B/final-project/blob/master/Dashboard.png)
 
-Our home page, [World Trend] is the real-time world situation map showing the total cases confirmed, deaths and recovered. Users can choose countries that they are interested in to see the further details of that country. 
+The home shows a real-time worldwide situation map of the total cases confirmed, deaths and recovered. 
 
 ***
 ### Author
