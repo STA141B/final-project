@@ -19,7 +19,7 @@ The aim of this App is to provide worldwide real-time information about new coro
 - CDC Frequently Q&A: https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics
 ***
 ### User Guide
-- World Trend (home page):  
+* World Trend (home page):  
 &emsp; Our home page is the real-time world situation map showing the total cases confirmed, deaths and recovered. Users can choose countries that they are interested in to see the further details of that country.  
 
 #### Detailed Situation: 
