@@ -15,8 +15,8 @@ library(furrr)
 library(shiny)
 library(shinybusy)
 
-#setwd('C:/Users/98455/Desktop/winter_SY/STA141B/Final Project')
-#source("functions.R")
+setwd('C:/Users/98455/Desktop/winter_SY/STA141B/Final Project')
+source("helpers.R") 
 world <- geojson_read("custom.geo.json", what = "sp")
 list <- read_coro_data("https://www.worldometers.info/coronavirus/#countries", world)
 data_Map <- list[[1]]
@@ -55,7 +55,7 @@ QA <- as.character(
         tags$strong("Q: How It Spreads?")),
       tags$h5("A: The virus that causes COVID-19 seems to be spreading easily and sustainably in the community (\"community spread\") in ",
               tags$a(href = "https://www.cdc.gov/coronavirus/2019-ncov/prepare/transmission.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Fabout%2Ftransmission.html",
-                     "some affected geographic areas."),
+                     tags$i(tags$strong("some affected geographic areas."))), 
               " Community spread means people have been infected with the virus in an area, including some who are not sure how or where they became infected.")
     ),
     tags$br(),
@@ -64,7 +64,7 @@ QA <- as.character(
         tags$strong("Q: How can I protect myself?")),
       tags$h5("A: Visit the ",
               tags$a(href = "https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Fabout%2Fprevention.html",
-                     " COVID-19 Prevention and Treatment"),
+                     tags$i(tags$strong("COVID-19 Prevention and Treatment"))),
               " page to learn about how to protect yourself from respiratory illnesses, like COVID-19.")
     ),
     tags$br(),
@@ -73,7 +73,7 @@ QA <- as.character(
         tags$strong("Q: What are the symptoms and complications that COVID-19 can cause?")),
       tags$h5("A: Current symptoms reported for patients with COVID-19 have included mild to severe respiratory illness with fever1, cough, and difficulty breathing. ",
               tags$a(href = "https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Fabout%2Fsymptoms.html",
-                     "Read about COVID-19 Symptoms."))
+                     tags$i(tags$strong("Read about COVID-19 Symptoms."))))
     )  
   )
          
@@ -129,6 +129,51 @@ linkeight <- as.character(
   )
 )
 
+linknine <- as.character(
+  tags$h5(tags$a(href = "https://en.wikipedia.org/wiki/Coronavirus_disease_2019",
+                 "Wikipedia: https://en.wikipedia.org/wiki/Coronavirus_disease_2019")
+  )
+)
+
+About <- as.character(
+  tags$body(
+    tags$br(),
+    div(
+      tags$h4(
+        tags$strong("Motivation")),
+      tags$h5("Coronavirus disease 2019 (COVID-19) is an infectious disease caused by 
+              severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus 
+              is thought to be natural and have an animal origin, through spillover 
+              infection. It was first transmitted to humans in Wuhan, China, in November 
+              or December 2019, and the primary source of infection became human-to-human 
+              transmission by early January 2020. The earliest known infection occurred 
+              on 17 November 2019 and has since spread globally, resulting in the 2019-20 
+              coronavirus pandemic."),
+      tags$h5("The aim of this App is to provide worldwide real-time information about new coronavirus outbreak, including ", 
+              tags$i(tags$strong("World Trend")), "showing virus spreading; ", 
+              tags$i(tags$strong("Detailed Situation")), "with deaths, recovered and active cases; ",
+              tags$i(tags$strong("Daily Report")), " that allowed country comparisons; ",
+              tags$i(tags$strong("Typical Country Data")), "that people may concern about; ",
+              tags$i(tags$strong("Breaking News")), "reported about \"coronavirus\" in four countries; ", 
+              tags$i(tags$strong("More Information")), "where you could find more about the virus and U.S. testing.")
+    ),
+    tags$br(),
+    div(
+      tags$h4(
+        tags$strong("Code")),
+      tags$h5("Code and input data used to generate this Shiny App are available on ",
+              tags$a(href = "https://github.com/STA141B/final-project",
+                     tags$i(tags$strong("Github."))))
+    ),
+    tags$br(),
+    div(
+      tags$h4(
+        tags$strong("Feedback")),
+      tags$h5("If you want to report any issue, please contact us: covidapphelp@gmail.com.")
+    ) 
+  )
+  
+)
 
 
 

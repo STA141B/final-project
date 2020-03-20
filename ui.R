@@ -128,7 +128,7 @@ shinyUI(
                                  fluidRow(
                                    column(2),
                                    column(6,
-                                          img(src="coronavirus.jpg", height = 290, width = 550),
+                                          img(src="coronavirus.jpg", height = 290, width = 540),
                                           h6("The 2019 Novel Coronavirus (2019-nCoV), 
                                               portrayed in an illustration created at the Centers for 
                                               Disease Control and Prevention. ALISSA ECKERT, MS; 
@@ -167,6 +167,17 @@ shinyUI(
                                            br(),
                                            htmlOutput("link5")
                                            )
+                                 ),
+                        "----",
+                        tabPanel("About", icon = icon("info-circle"),#bolt flask
+                                 titlePanel("About this site"),
+                                 mainPanel(
+                                   width = 9,
+                                   htmlOutput("ABOUT"),
+                                   br(),
+                                   br(),
+                                   htmlOutput("link9")
+                                 )
                                  )
                         )
     )

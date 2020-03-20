@@ -45,6 +45,10 @@ shinyServer(function(input, output) {
       QA
     })
     
+    output$ABOUT <- renderText({
+      About
+    })
+    
     output$link1 <- renderText({
       linkone
     })
@@ -75,6 +79,10 @@ shinyServer(function(input, output) {
     
     output$link8 <- renderText({
       linkeight
+    })
+    
+    output$link9 <- renderText({
+      linknine
     })
 
     output$tbl <- renderDT({
