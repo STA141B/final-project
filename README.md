@@ -20,7 +20,7 @@ The aim of this App is to provide worldwide real-time information about new coro
 ***
 ### User Guide
 - World Trend (home page):  
-&#8195 Our home page is the real-time world situation map showing the total cases confirmed, deaths and recovered. Users can choose countries that they are interested in to see the further details of that country.  
+&emsp Our home page is the real-time world situation map showing the total cases confirmed, deaths and recovered. Users can choose countries that they are interested in to see the further details of that country.  
    The second page, [Detailed Situation] contains a table that shows ten countries by default each page and can be sort by order of any column or filter by typing the name of the country or setting range of each numeric statistics.  
    Next page is called [Daily Report]. It is the line chart of the cumulative confirmed and daily new confirmed, death or recovered cases of different countries. Users can choose the countries they are interested in by selecting the country in the top left bar called “Select Countries”. They can select multiple countries in the bar for comparison.  
    In the [Typical Country Data] page, users can get the map showing the total cases and total death of a country by selecting one among China, US and Canada. They can choose to see the total cases or total deaths. They can also see the statistical data individual number of a province/state interactive with the map.  
