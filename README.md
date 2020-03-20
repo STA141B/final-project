@@ -1,8 +1,7 @@
 # Coronavirus(COVID-19) Real-time Dynamics
 ### Dashboard
+This shows a real-time worldwide situation map of the total cases confirmed, deaths and recovered.
 ![image](https://github.com/STA141B/final-project/blob/master/Dashboard.png)
-
-The home shows a real-time worldwide situation map of the total cases confirmed, deaths and recovered. 
 
 ***
 ### Author
