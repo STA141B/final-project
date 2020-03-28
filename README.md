@@ -45,7 +45,7 @@ Coronavirus has spread to more than 190 countries and become a global pandemic. 
 - Worldometers: https://www.worldometers.info/coronavirus/#countries
 - Novel Coronavirus (COVID-19): https://github.com/CSSEGISandData/COVID-19
 - World and China Map Data: https://github.com/deldersveld/topojson
-- US and Canada Map Data: https://exploratory.io/map
+- Australia and Canada Map Data: https://exploratory.io/map
 - News API: https://newsapi.org/s/us-news-api
 - CDC Frequently Q&A: https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics
 ***
